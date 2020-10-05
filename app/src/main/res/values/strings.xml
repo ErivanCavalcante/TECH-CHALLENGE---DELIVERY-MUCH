@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DeliveryMuchTest</string>
+    <string name="repository_title">Repositório</string>
+    <string name="repository_detail">Detalhes</string>
 </resources>

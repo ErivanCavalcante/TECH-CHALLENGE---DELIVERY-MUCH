@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -68,4 +69,7 @@ dependencies {
 
     implementation "com.mikepenz:fastadapter:$fastadapter_version"
     implementation "com.mikepenz:fastadapter-extensions-paged:${fastadapter_version}"
+
+    //Exibir imagens
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
