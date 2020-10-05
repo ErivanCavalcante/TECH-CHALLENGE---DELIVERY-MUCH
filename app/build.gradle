@@ -21,6 +21,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        //Variaveis globais para facilitar caso seja necessario modificar
+        debug {
+            buildConfigField "String", "API_BASE_URL", '"http://10.0.0.114:8000/api/v1/"'
+        }
     }
 
     //Ativa o databing para utilizar no MVVM
