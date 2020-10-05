@@ -22,9 +22,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //Ativa o databing para utilizar no MVVM
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
+    //Algumas bibliotecas precisa de no minimo java na versão 8
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+    }
 }
 
 dependencies {
+    def lifecycle_version = "2.2.0"
+    def fastadapter_version = "4.1.1"
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
@@ -34,4 +49,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    //Material design
+    implementation 'com.google.android.material:material:1.2.1'
+
+    //viewmodel para o uso do MVVM
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    //Retrofit para acesso a api
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
+
+    implementation "com.mikepenz:fastadapter:$fastadapter_version"
+    implementation "com.mikepenz:fastadapter-extensions-paged:${fastadapter_version}"
 }
