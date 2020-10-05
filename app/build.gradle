@@ -24,7 +24,7 @@ android {
 
         //Variaveis globais para facilitar caso seja necessario modificar
         debug {
-            buildConfigField "String", "API_BASE_URL", '"http://10.0.0.114:8000/api/v1/"'
+            buildConfigField "String", "API_BASE_URL", '"https://api.github.com/"'
         }
     }
 
