@@ -1,36 +1,32 @@
 package com.erivan.santos.deliverymuchtest.datasource.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.erivan.santos.deliverymuchtest.datasource.api.endpoint.RepositoryEndpoint
 import com.erivan.santos.deliverymuchtest.datasource.api.model.Repo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 
 class RepoRepository(val api: RepositoryEndpoint) {
 
-    fun findAll(page: Int): LiveData<List<Repo>> {
+    suspend fun findAll(page: Int): List<Repo> = withContext(Dispatchers.IO)  {
         val request = api.getAllPlubicRepositories(page)
 
-        return executeRequest(request)
+        return@withContext executeRequest(request)
     }
 
-    fun findByName(name: String): LiveData<List<Repo>> {
+    suspend fun findByName(name: String): List<Repo> = withContext(Dispatchers.IO) {
         val request = api.searchForName(name)
 
-        return executeRequest(request)
+        return@withContext executeRequest(request)
     }
 
-    private fun executeRequest(request: Call<List<Repo>>): LiveData<List<Repo>> {
+    private fun executeRequest(request: Call<List<Repo>>): List<Repo> {
         val ret = request.execute()
 
         if (ret.isSuccessful) {
             return ret.body()?.let {
-                MutableLiveData<List<Repo>>().apply {
-                    value = it
-                }
-            } ?: MutableLiveData<List<Repo>>().apply {
-                value = ArrayList<Repo>()
-            }
+                ArrayList(it)
+            } ?: ArrayList()
         }
 
         when (ret.code()) {
