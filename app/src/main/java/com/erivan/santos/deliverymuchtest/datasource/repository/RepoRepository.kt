@@ -6,15 +6,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 
-class RepoRepository(val api: RepositoryEndpoint) {
+open class RepoRepository(val api: RepositoryEndpoint) : RepoRepositoryContract {
 
-    suspend fun findAll(page: Int): Query? = withContext(Dispatchers.IO)  {
+    override suspend fun findAll(page: Int): Query? = withContext(Dispatchers.IO)  {
         val request = api.getAllPlubicRepositories(page)
 
         executeRequest(request)
     }
 
-    suspend fun findByName(name: String, page: Int): Query? = withContext(Dispatchers.IO) {
+    override suspend fun findByName(name: String, page: Int): Query? = withContext(Dispatchers.IO) {
         val request = api.searchForName("${name} in:name", page)
 
         executeRequest(request)

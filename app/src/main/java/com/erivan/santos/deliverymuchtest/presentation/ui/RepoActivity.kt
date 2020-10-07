@@ -23,6 +23,7 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
 import com.mikepenz.fastadapter.ui.items.ProgressItem
 import kotlinx.android.synthetic.main.activity_repo.*
+import kotlinx.coroutines.Dispatchers
 
 class RepoActivity : AppCompatActivity() {
 
