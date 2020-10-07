@@ -8,7 +8,6 @@ import com.erivan.santos.deliverymuchtest.R
 import com.erivan.santos.deliverymuchtest.databinding.ActivityRepoDetailBinding
 import com.erivan.santos.deliverymuchtest.presentation.model.Repo
 import com.erivan.santos.deliverymuchtest.presentation.viewmodel.RepoDetailViewModel
-import com.erivan.santos.deliverymuchtest.presentation.viewmodel.RepoDetailViewModelFactory
 
 class RepoDetailActivity : AppCompatActivity() {
     lateinit var viewModel: RepoDetailViewModel
@@ -18,16 +17,16 @@ class RepoDetailActivity : AppCompatActivity() {
 
         val binding = DataBindingUtil.setContentView<ActivityRepoDetailBinding>(this, R.layout.activity_repo_detail)
 
-        binding.viewModel = createViewModel()
+        viewModel = createViewModel()
+
+        binding.viewModel = viewModel
     }
 
     private fun createViewModel(): RepoDetailViewModel {
         val repo = intent.getSerializableExtra("repo") as? Repo
             ?: throw Exception("")
 
-        val factory = RepoDetailViewModelFactory(repo)
-
-        return ViewModelProvider(this, factory)
+        return ViewModelProvider(this, RepoDetailViewModel.RepoDetailViewModelFactory(repo))
             .get(RepoDetailViewModel::class.java)
     }
 }

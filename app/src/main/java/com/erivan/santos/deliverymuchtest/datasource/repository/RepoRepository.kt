@@ -1,32 +1,30 @@
 package com.erivan.santos.deliverymuchtest.datasource.repository
 
 import com.erivan.santos.deliverymuchtest.datasource.api.endpoint.RepositoryEndpoint
-import com.erivan.santos.deliverymuchtest.datasource.api.model.Repo
+import com.erivan.santos.deliverymuchtest.datasource.api.model.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 
 class RepoRepository(val api: RepositoryEndpoint) {
 
-    suspend fun findAll(page: Int): List<Repo> = withContext(Dispatchers.IO)  {
+    suspend fun findAll(page: Int): Query? = withContext(Dispatchers.IO)  {
         val request = api.getAllPlubicRepositories(page)
 
-        return@withContext executeRequest(request)
+        executeRequest(request)
     }
 
-    suspend fun findByName(name: String): List<Repo> = withContext(Dispatchers.IO) {
-        val request = api.searchForName(name)
+    suspend fun findByName(name: String, page: Int): Query? = withContext(Dispatchers.IO) {
+        val request = api.searchForName("${name} in:name", page)
 
-        return@withContext executeRequest(request)
+        executeRequest(request)
     }
 
-    private fun executeRequest(request: Call<List<Repo>>): List<Repo> {
+    private fun executeRequest(request: Call<Query>): Query? {
         val ret = request.execute()
 
         if (ret.isSuccessful) {
-            return ret.body()?.let {
-                ArrayList(it)
-            } ?: ArrayList()
+            return ret.body()
         }
 
         when (ret.code()) {

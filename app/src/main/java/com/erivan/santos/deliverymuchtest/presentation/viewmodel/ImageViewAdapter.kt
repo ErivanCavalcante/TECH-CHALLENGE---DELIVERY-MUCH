@@ -10,6 +10,9 @@ object ImageViewAdapter {
     @BindingAdapter("app:srcAvatar", requireAll = false)
     fun setImage(img: ImageView, src: String?) {
         src?.let {
+            if (it.isBlank())
+                return@let
+
             Picasso.get()
                 .load(it)
                 .placeholder(R.drawable.ic_image_black)

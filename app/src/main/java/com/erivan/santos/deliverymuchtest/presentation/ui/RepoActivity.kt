@@ -1,10 +1,8 @@
 package com.erivan.santos.deliverymuchtest.presentation.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -17,11 +15,7 @@ import com.erivan.santos.deliverymuchtest.config.AppApplication
 import com.erivan.santos.deliverymuchtest.datasource.api.endpoint.RepositoryEndpoint
 import com.erivan.santos.deliverymuchtest.datasource.repository.RepoRepository
 import com.erivan.santos.deliverymuchtest.presentation.model.Repo
-import com.erivan.santos.deliverymuchtest.presentation.viewmodel.RepoDetailViewModel
-import com.erivan.santos.deliverymuchtest.presentation.viewmodel.RepoDetailViewModelFactory
 import com.erivan.santos.deliverymuchtest.presentation.viewmodel.RepoViewModel
-import com.erivan.santos.deliverymuchtest.presentation.viewmodel.RepoViewModelFactory
-import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
@@ -36,6 +30,8 @@ class RepoActivity : AppCompatActivity() {
     protected lateinit var footerAdapter: GenericItemAdapter
 
     lateinit var viewModel: RepoViewModel
+
+    var quering = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +56,22 @@ class RepoActivity : AppCompatActivity() {
         })
 
         viewModel.list.observe(this, Observer {
+            adapter.set(it)
+        })
+
+        viewModel.loadMoreList.observe(this, Observer {
             footerAdapter.clear()
-            adapter.add(it)
+
+            it.pegaContentSeNaoFoiHandled()?.let { ev ->
+                adapter.add(ev)
+            }
+        })
+
+        viewModel.clearList.observe(this, Observer {
+            it.pegaContentSeNaoFoiHandled()?.let { ev ->
+                footerAdapter.clear()
+                adapter.clear()
+            }
         })
 
         rvRepo.addOnScrollListener(object : EndlessRecyclerOnScrollListener() {
@@ -71,7 +81,7 @@ class RepoActivity : AppCompatActivity() {
                 progressItem.isEnabled = false
                 footerAdapter.add(progressItem)
 
-                viewModel.next()
+                viewModel.load()
             }
         })
 
@@ -84,9 +94,7 @@ class RepoActivity : AppCompatActivity() {
     private fun createViewModel(): RepoViewModel {
         val api = AppApplication.getInstance().getApi().criarService(RepositoryEndpoint::class.java)
 
-        val factory = RepoViewModelFactory(RepoRepository(api))
-
-        return ViewModelProvider(this, factory)
+        return ViewModelProvider(this, RepoViewModel.RepoViewModelFactory(RepoRepository(api)))
             .get(RepoViewModel::class.java)
     }
 
@@ -128,14 +136,18 @@ class RepoActivity : AppCompatActivity() {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrBlank()) {
-                    viewModel.search(query)
+                    if (!quering) {
+                        viewModel.resetPagination()
+                        quering = true
+                    }
+
+                    viewModel.load(query)
 
                     searchItem.collapseActionView()
                     return true
                 }
 
-                viewModel.resetPagination()
-                viewModel.next()
+                quering = false
 
                 searchItem.collapseActionView()
                 return true
@@ -146,6 +158,15 @@ class RepoActivity : AppCompatActivity() {
                 return true
             }
         })
+
+        searchView?.setOnCloseListener {
+            if (!quering) {
+                viewModel.resetPagination()
+                viewModel.load()
+            }
+
+            true
+        }
 
         return super.onCreateOptionsMenu(menu)
     }
