@@ -9,7 +9,7 @@ do GitHub. Além dessa função principal é possivel pesquisar repósitorios pe
 
 # Passo a passo da construção
 
-O aplicativo foi construido senguindo as seguintes guidelines recomendadas pelo Google:
+O aplicativo foi construído seguindo as seguintes guidelines recomendadas pelo Google:
 
 - Material design
 - MVVM
@@ -19,7 +19,7 @@ Um modelo simplificado da arquitetura MVVM pode ser visto abaixo
 ![final-architecture](app/src/main/res/mipmap-xxhdpi/final-architecture.png)
 
 Também foi utilizado uma camada intermediária ao acesso de dados chamado de Repository.
-O repository tem por objetivo abstrair o acesso a dados, seja de banco de dados ou de um cache ou ate mesmo de uma api como
+O repository tem por objetivo abstrair o acesso aos dados, seja de banco de dados ou de um cache ou até mesmo de uma api como
 foi o caso.
 
 O fluxo de integração com sistema segue os seguintes passos:
@@ -33,23 +33,22 @@ O fluxo de integração com sistema segue os seguintes passos:
 
 A estrutura de pastas utilizada foi a seguinte:
 
-config - contem todas as classes que configuram a aplicação. São classes globais.
+config - contém todas as classes que configuram a aplicação. São classes globais.
 datasource - todo o acesso a dados vem nesse pasta. Também inclui os repositories.
 presentation - contém as classes de view e viewmodel.
 
 ### O código
 
-Existem duas activities no app. RepoActivity lista todos os repositórios alem de ter um campo de pesquisa na AppBar.
+Existem duas activities no app. RepoActivity lista todos os repositórios além de ter um campo de pesquisa na AppBar.
 
-RepoDetailActivity mostra os detalhes do repositório selecionado no RepoActivity, mostra também a imaem de avatar do dono. Para exibir
+RepoDetailActivity mostra os detalhes do repositório selecionado no RepoActivity, mostra também a imagem de avatar do dono. Para exibir
 a imagem foi utilizado a biblioteca Picasso para agilizar e facilitar a atividade.
 
-Como mensionado ateriormente, a activity RepoActivity se trata de uma lista por isso normalmente se faz necessário criar um adaptador customizado mas para aumentar a produtividade foi utilizado
-a biblioteca FastAdapter com o fim de facilitar essa criação. Todas as actiities instaciam seus respectivos viewmodel e injetam as
-dependências necessárias. Poderia ser usado uma biblioteca pra injetar essas dependências de forma mais robusta mas como o projeto  
-náo é muito complexo foi feito da forma mais simples possível.
+Como mencionado ateriormente, a activity RepoActivity trata-se de uma lista, por isso, normalmente se faz necessário criar um adaptador customizado mas para aumentar a produtividade foi utilizado
+a biblioteca FastAdapter com o fim de facilitar essa criação. Todas as actiities instanciam seus respectivos viewmodel e injetam as
+dependências necessárias. Poderia ser usado uma biblioteca pra injetar essas dependências de forma mais robusta mas como o projeto náo é muito complexo foi feito da forma mais simples possível.
 
-Falando dos viewmodels, o RepoDetailViewmodel contem apenas os livedatas (observables) para que a view seja notificada, uma única resalva é
+Falando dos viewmodels, o RepoDetailViewmodel contém apenas os livedatas (observables) para que a view seja notificada, uma única resalva é
 que foi necessario criar um binding adapter para converter a url em um livedata.
 
 No RepoViewmodel tem a maior parte das regras de negócio. Como a pesquisa e o carregamento são basicamente a mesma coisa, foi optado então
