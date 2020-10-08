@@ -37,7 +37,8 @@ config - contem todas as classes que configuram a aplicação. São classes glob
 datasource - todo o acesso a dados vem nesse pasta. Também inclui os repositories.
 presentation - contém as classes de view e viewmodel.
 
-**O código**
+### O código
+
 Existem duas activities no app. RepoActivity lista todos os repositórios alem de ter um campo de pesquisa na AppBar.
 
 RepoDetailActivity mostra os detalhes do repositório selecionado no RepoActivity, mostra também a imaem de avatar do dono. Para exibir
@@ -55,5 +56,6 @@ No RepoViewmodel tem a maior parte das regras de negócio. Como a pesquisa e o c
 usar a mesma função. Basicamente a função controla a paginação, chama o repository pedindo os dados que veem da api, pega os dados
 e coloca nos livedatas para serem consumidos pela view.
 
-**Testes**
-    Um teste unitário foi feito para testar a funcionalidade do viewmodel do RepoViewmodel. Todos os teste passaram.
+### Testes
+
+Um teste unitário foi feito para testar a funcionalidade do viewmodel do RepoViewmodel. Todos os teste passaram.
